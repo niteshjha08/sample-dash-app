@@ -4,7 +4,8 @@ import dash_html_components as html
 import pandas as pd
 import numpy as np
 print("hello world")
-app=dash.Dash()
+app=dash.Dash(__name__)
+server=app.server
 app.layout=html.Div([
     html.H1("Hey there!!"),
     html.Div("This is the dash tutorial"),
