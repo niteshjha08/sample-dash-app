@@ -4,9 +4,9 @@ import dash_html_components as html
 import pandas as pd
 import numpy as np
 print("hello world")
-app=dash.Dash(__name__)
-server=app.server
-app.layout=html.Div([
+dash_app=dash.Dash(__name__)
+app=dash_app.server
+dash_app.layout=html.Div([
     html.H1("Hey there!!"),
     html.Div("This is the dash tutorial"),
     dcc.Graph(
@@ -20,4 +20,4 @@ app.layout=html.Div([
             }}
     )])
 if __name__=='__main__':
-    app.run_server()
+    dash_app.run_server(debug=True)
