@@ -18,4 +18,5 @@ app.layout=html.Div([
                 'plot_bgcolor':'#D3D3D3'
             }}
     )])
-app.run_server()
+if __name__=='__main__':
+    app.run_server(port=8999)
