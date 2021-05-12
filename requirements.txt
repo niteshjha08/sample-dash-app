@@ -3,4 +3,3 @@ dash_html_components==1.1.1
 numpy==1.19.1
 pandas==1.1.1
 dash_core_components==1.14.1
-pyad==0.6.0

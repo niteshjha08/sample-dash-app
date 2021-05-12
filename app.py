@@ -8,8 +8,8 @@ print("hello world")
 dash_app=dash.Dash(__name__)
 app=dash_app.server
 dash_app.layout=html.Div([
-    html.H1("Hey there,{}!!".format(name)),
-    html.Div("This is the dash tutorial"),
+    html.H1("Hey there!!"),
+    html.Div("This is the dash sample"),
     dcc.Graph(
         id='sample1',
         figure={
