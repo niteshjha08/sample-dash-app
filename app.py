@@ -1,13 +1,16 @@
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
+from pyad import aduser
+user = aduser.ADUser.from_cn(username)
+name= user.get_attribute("displayName")
 import pandas as pd
 import numpy as np
 print("hello world")
 dash_app=dash.Dash(__name__)
 app=dash_app.server
 dash_app.layout=html.Div([
-    html.H1("Hey there!!"),
+    html.H1("Hey there,{}!!".format(name)),
     html.Div("This is the dash tutorial"),
     dcc.Graph(
         id='sample1',
