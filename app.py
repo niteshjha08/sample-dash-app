@@ -1,9 +1,7 @@
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
-from pyad import aduser
-user = aduser.ADUser.from_cn(username)
-name= user.get_attribute("displayName")
+
 import pandas as pd
 import numpy as np
 print("hello world")
