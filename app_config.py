@@ -11,7 +11,7 @@ CLIENT_SECRET = "oj1.KTL~hc~m49o_2K~Ct2rVpR4C6iCxs-" # Placeholder - for use ONL
 AUTHORITY = "https://login.microsoftonline.com/common"  # For multi-tenant app
 # AUTHORITY = "https://login.microsoftonline.com/Enter_the_Tenant_Name_Here"
 
-REDIRECT_PATH = "/auth"  # Used for forming an absolute URL to your redirect URI.
+REDIRECT_PATH = "/.auth/login/aad/callback"  # Used for forming an absolute URL to your redirect URI.
                               # The absolute URL must match the redirect URI you set
                               # in the app's registration in the Azure portal.
 
