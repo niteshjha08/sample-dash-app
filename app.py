@@ -15,9 +15,9 @@ Session(dash_app)
 app=dash_app.server
 
 dash_app.layout=html.Div([
-    dcc.Location(id='url',refresh=False)
+    dcc.Location(id='url',refresh=False),
     html.H1("Hey there!!"),
-    html.Div(id='username_div')
+    html.Div(id='username_div'),
     html.Div("This is the dash sample"),
     dcc.Graph(
         id='sample1',
@@ -33,17 +33,17 @@ dash_app.layout=html.Div([
 @app.callback(Output('username_div','children'),
               Input('url','pathname'))
 def navigating_function(pathname):
-    try:
-        if(pathname==app_config.REDIRECT_PATH):
-            cache = _load_cache()
-            result = _build_msal_app(cache=cache).acquire_token_by_auth_code_flow(
-                session.get("flow", {}), request.args)
-            if "error" in result:
-                return ("Auth Error")
-            session["user"] = result.get("id_token_claims")
-            _save_cache(cache)
-            return(session["user"])
-    except ValueError:
-        return("Value Error")
+
+    if(pathname==app_config.REDIRECT_PATH):
+        cache = _load_cache()
+        result = _build_msal_app(cache=cache).acquire_token_by_auth_code_flow(
+            session.get("flow", {}), request.args)
+        if "error" in result:
+            return ("Auth Error")
+        session["user"] = result.get("id_token_claims")
+        _save_cache(cache)
+        return(session["user"])
+    else:
+        return("Default Name")
 if __name__=='__main__':
     dash_app.run_server(debug=True)
