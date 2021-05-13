@@ -37,16 +37,16 @@ dash_app.layout=html.Div([
               Input('url','pathname'))
 def navigating_function(pathname):
 
-    if(pathname==app_config.REDIRECT_PATH):
-        cache = _load_cache()
-        result = _build_msal_app(cache=cache).acquire_token_by_auth_code_flow(
-            session.get("flow", {}), request.args)
-        if "error" in result:
-            return ("Auth Error")
-        session["user"] = result.get("id_token_claims")
-        _save_cache(cache)
-        return(session["user"])
-    else:
-        return(pathname)
+    #if(pathname==app_config.REDIRECT_PATH):
+    cache = _load_cache()
+    result = _build_msal_app(cache=cache).acquire_token_by_auth_code_flow(
+        session.get("flow", {}), request.args)
+    if "error" in result:
+        return ("Auth Error")
+    session["user"] = result.get("id_token_claims")
+    _save_cache(cache)
+    return(session["user"])
+    #else:
+     #   return(pathname)
 if __name__=='__main__':
     dash_app.run_server(debug=True)
