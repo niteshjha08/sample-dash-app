@@ -45,7 +45,7 @@ def navigating_function(pathname):
         return ("Auth Error")
     session["user"] = result.get("id_token_claims")
     _save_cache(cache)
-    return(session["user"])
+    return ("USER: "+ session["user"])
     #else:
        # return("Pathname: ",pathname)
 if __name__=='__main__':
