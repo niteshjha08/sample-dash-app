@@ -47,6 +47,6 @@ def navigating_function(pathname):
         _save_cache(cache)
         return(session["user"])
     else:
-        return("Default Name")
+        return(pathname)
 if __name__=='__main__':
     dash_app.run_server(debug=True)
