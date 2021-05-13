@@ -6,11 +6,14 @@ import numpy as np
 from flask import Flask, render_template, session, request, redirect, url_for
 from flask_session import Session
 import msal
+from dash.dependencies import Output, Input,State
 
 import app_config
 from helper_functions import _load_cache,_save_cache,_build_msal_app,_build_auth_code_flow
+
+
 dash_app=dash.Dash(__name__)
-dash_app.config.from_object(app_config)
+
 Session(dash_app)
 app=dash_app.server
 
@@ -30,7 +33,7 @@ dash_app.layout=html.Div([
             }}
     )])
 
-@app.callback(Output('username_div','children'),
+@dash_app.callback(Output('username_div','children'),
               Input('url','pathname'))
 def navigating_function(pathname):
 
