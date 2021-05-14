@@ -34,8 +34,7 @@ dash_app.layout=html.Div([
             }}
     )])
 
-@dash_app.callback(Output('username_div','children'),
-                   Output('pathname-div','children'),
+@dash_app.callback(Output('pathname-div','children'),
               Input('url','pathname'))
 def navigating_function(pathname):
 
@@ -48,7 +47,7 @@ def navigating_function(pathname):
     # session["user"] = result.get("id_token_claims")
     # _save_cache(cache)
 
-    return ("USER: "+ session['username']),pathname
+    return pathname
     #else:
        # return("Pathname: ",pathname)
 if __name__=='__main__':
