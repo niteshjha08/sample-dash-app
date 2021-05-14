@@ -34,7 +34,7 @@ dash_app.layout=html.Div([
             }}
     )])
 
-@dash_app.callback(Output('username-div','children')
+@dash_app.callback(Output('username-div','children'),
     Output('pathname-div','children'),
               Input('url','pathname'))
 def navigating_function(pathname):
