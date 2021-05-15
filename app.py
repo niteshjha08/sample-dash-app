@@ -21,7 +21,7 @@ app=dash_app.server
 dash_app.layout=html.Div([
     dcc.Location(id='url',refresh=False),
     html.H1("Hey there!!"),
-    html.Div(id='username_div'),
+    html.Div(id='username-div'),
     html.Div(id='pathname-div'),
     html.Div("This is the dash sample"),
     dcc.Graph(
@@ -42,6 +42,8 @@ def navigating_function(pathname):
 
     # if(pathname=='/auth'):
     r=requests.get('https://graph.microsoft.com/v1.0/me')
+    rj=r.json()
+    rj_str=str(rj)
     # cache = _load_cache()
     # result = _build_msal_app(cache=cache).acquire_token_by_auth_code_flow(
     #     session.get("flow", {}), request.args)
@@ -49,7 +51,7 @@ def navigating_function(pathname):
     #     return ("Auth Error")
     # session["user"] = result.get("id_token_claims")
     # _save_cache(cache)
-    return (r,"PATHNAME:"+pathname)
+    return (rj_str,"PATHNAME:"+pathname)
     #else:
        # return("Pathname: ",pathname)
 if __name__=='__main__':
