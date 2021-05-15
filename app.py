@@ -1,4 +1,5 @@
 import dash
+import requests
 import dash_core_components as dcc
 import dash_html_components as html
 import pandas as pd
@@ -40,14 +41,15 @@ dash_app.layout=html.Div([
 def navigating_function(pathname):
 
     # if(pathname=='/auth'):
-    cache = _load_cache()
-    result = _build_msal_app(cache=cache).acquire_token_by_auth_code_flow(
-        session.get("flow", {}), request.args)
-    if "error" in result:
-        return ("Auth Error")
-    session["user"] = result.get("id_token_claims")
-    _save_cache(cache)
-    return (session['user'],pathname)
+    r=requests.get('https://graph.microsoft.com/v1.0/me')
+    # cache = _load_cache()
+    # result = _build_msal_app(cache=cache).acquire_token_by_auth_code_flow(
+    #     session.get("flow", {}), request.args)
+    # if "error" in result:
+    #     return ("Auth Error")
+    # session["user"] = result.get("id_token_claims")
+    # _save_cache(cache)
+    return (r,"PATHNAME:"+pathname)
     #else:
        # return("Pathname: ",pathname)
 if __name__=='__main__':
