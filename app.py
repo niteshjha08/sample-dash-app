@@ -21,7 +21,12 @@ app=dash_app.server
 dash_app.layout=html.Div([
     dcc.Location(id='url',refresh=False),
     html.H1("Hey there!!"),
+    html.Div(id='get-div'),
+    html.Div(id='get-div2'),
+    html.Div(id='get-div3'),
+    html.Div(id='get-div4'),
     html.Div(id='username-div'),
+    html.Div(id='username-div2'),
     html.Div(id='pathname-div'),
     html.Div("This is the dash sample"),
     dcc.Graph(
@@ -35,7 +40,12 @@ dash_app.layout=html.Div([
             }}
     )])
 
-@dash_app.callback(Output('username-div','children'),
+@dash_app.callback(Output('get-div','children'),
+Output('get-div2','children'),
+Output('get-div3','children'),
+Output('get-div4','children'),
+Output('username-div','children'),
+Output('username-div2','children'),
     Output('pathname-div','children'),
               Input('url','pathname'))
 def navigating_function(pathname):
@@ -51,7 +61,20 @@ def navigating_function(pathname):
     #     return ("Auth Error")
     # session["user"] = result.get("id_token_claims")
     # _save_cache(cache)
-    return (rj_str,"PATHNAME:"+pathname)
+    # username=session['user']
+    # username2=session['username']
+    r2 = requests.get('https://graph.microsoft.com/v1.0/users/{id | userPrincipalName}')
+    rj2 = r2.json()
+    rj2_str = str(rj2)
+    r3 = requests.get('https://graph.microsoft.com/User.Read')
+    rj3 = r3.json()
+    rj3_str = str(rj3)
+    r4 = requests.get('https://graph.microsoft.com/User.ReadBasic.All')
+    rj4 = r4.json()
+    rj4_str = str(rj4)
+
+
+    return (rj_str,rj2_str,rj3_str,rj4_str,"USERNAME:","USERNAME2:","PATHNAME: "+pathname)
     #else:
        # return("Pathname: ",pathname)
 if __name__=='__main__':
