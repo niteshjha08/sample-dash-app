@@ -10,14 +10,16 @@ import msal
 from dash.dependencies import Output, Input,State
 
 import app_config
-from helper_functions import _load_cache,_save_cache,_build_msal_app,_build_auth_code_flow
+# from helper_functions import _load_cache,_save_cache,_build_msal_app
 
 
 dash_app=dash.Dash(__name__)
-
 Session(dash_app)
 app=dash_app.server
-
+# from werkzeug.middleware.proxy_fix import ProxyFix
+# dash_app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
+from werkzeug.middleware.proxy_fix import ProxyFix
+dash_app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
 dash_app.layout=html.Div([
     dcc.Location(id='url',refresh=False),
     html.H1("Hey there!!"),
@@ -48,8 +50,10 @@ Output('username-div','children'),
 Output('username-div2','children'),
     Output('pathname-div','children'),
               Input('url','pathname'))
-def navigating_function(pathname):
-
+def authorized(pathname):
+    print("PATHNAME:",pathname)
+    session["flow"] = _build_auth_code_flow(scopes=app_config.SCOPE)
+    print("AUTH URI:", session["flow"]["auth_uri"])
     # if(pathname=='/auth'):
     r=requests.get('https://graph.microsoft.com/v1.0/me')
     rj=r.json()
@@ -76,6 +80,37 @@ def navigating_function(pathname):
 
     return (rj_str,rj2_str,rj3_str,rj4_str,"USERNAME:","USERNAME2:","PATHNAME: "+pathname)
     #else:
-       # return("Pathname: ",pathname)
+       # return("Pathname8: ",pathname)
+
+def _build_auth_code_flow(authority=None, scopes=None):
+    return _build_msal_app(authority=authority).initiate_auth_code_flow(
+        scopes or [],
+        redirect_uri=url_for("authorized", _external=True))
+def _load_cache():
+    cache = msal.SerializableTokenCache()
+    if session.get("token_cache"):
+        cache.deserialize(session["token_cache"])
+    return cache
+
+def _save_cache(cache):
+    if cache.has_state_changed:
+        session["token_cache"] = cache.serialize()
+
+def _build_msal_app(cache=None, authority=None):
+    return msal.ConfidentialClientApplication(
+        app_config.CLIENT_ID, authority=authority or app_config.AUTHORITY,
+        client_credential=app_config.CLIENT_SECRET, token_cache=cache)
+
+
+
+def _get_token_from_cache(scope=None):
+    cache = _load_cache()  # This web app maintains one cache per session
+    cca = _build_msal_app(cache=cache)
+    accounts = cca.get_accounts()
+    if accounts:  # So all account(s) belong to the current signed-in user
+        result = cca.acquire_token_silent(scope, account=accounts[0])
+        _save_cache(cache)
+        return result
+
 if __name__=='__main__':
     dash_app.run_server(debug=True)

@@ -2,7 +2,7 @@ import msal
 from flask import Flask, render_template, session, request, redirect, url_for
 from flask_session import Session
 import app_config
-
+from app import _build_auth_code_flow
 
 def _load_cache():
     cache = msal.SerializableTokenCache()
@@ -19,10 +19,7 @@ def _build_msal_app(cache=None, authority=None):
         app_config.CLIENT_ID, authority=authority or app_config.AUTHORITY,
         client_credential=app_config.CLIENT_SECRET, token_cache=cache)
 
-def _build_auth_code_flow(authority=None, scopes=None):
-    return _build_msal_app(authority=authority).initiate_auth_code_flow(
-        scopes or [],
-        redirect_uri=url_for("authorized", _external=True))
+
 
 def _get_token_from_cache(scope=None):
     cache = _load_cache()  # This web app maintains one cache per session
