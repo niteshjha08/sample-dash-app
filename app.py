@@ -12,11 +12,12 @@ from dash.dependencies import Output, Input,State
 import app_config
 # from helper_functions import _load_cache,_save_cache,_build_msal_app
 
+app=Flask(__name__)
 
-dash_app=dash.Dash(__name__)
-dash_app.secret_key='12345'
+dash_app=dash.Dash(__name__,server=app)
+dash_app.config['secret_key']='12345'
 Session(dash_app)
-app=dash_app.server
+
 # from werkzeug.middleware.proxy_fix import ProxyFix
 # dash_app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
 from werkzeug.middleware.proxy_fix import ProxyFix
