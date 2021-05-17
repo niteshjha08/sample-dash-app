@@ -14,6 +14,7 @@ import app_config
 
 
 dash_app=dash.Dash(__name__)
+dash_app.secret_key='12345'
 Session(dash_app)
 app=dash_app.server
 # from werkzeug.middleware.proxy_fix import ProxyFix
