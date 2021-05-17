@@ -13,7 +13,7 @@ import app_config
 # from helper_functions import _load_cache,_save_cache,_build_msal_app
 
 app=Flask(__name__)
-app.config['secret_key']='12345'
+app.secret_key='12345'
 Session(app)
 dash_app=dash.Dash(__name__,server=app)
 
