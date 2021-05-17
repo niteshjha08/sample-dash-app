@@ -13,7 +13,7 @@ import app_config
 # from helper_functions import _load_cache,_save_cache,_build_msal_app
 
 app=Flask(__name__)
-app.secret_key='12345'
+app.config.from_object(app_config)
 Session(app)
 dash_app=dash.Dash(__name__,server=app)
 
@@ -57,18 +57,20 @@ def authorized(pathname):
     print("PATHNAME:",pathname)
     session["flow"] = _build_auth_code_flow(scopes=app_config.SCOPE)
     print("AUTH URI:", session["flow"]["auth_uri"])
-    # if(pathname=='/auth'):
+    if(pathname=='/getAToken'):
+        cache = _load_cache()
+        result = _build_msal_app(cache=cache).acquire_token_by_auth_code_flow(
+            session.get("flow", {}), request.args)
+        if "error" in result:
+            return ("Auth Error")
+        session["user"] = result.get("id_token_claims")
+        _save_cache(cache)
+        username = session['user']
+        print("USERNAME:",username)
     r=requests.get('https://graph.microsoft.com/v1.0/me')
     rj=r.json()
     rj_str=str(rj)
-    # cache = _load_cache()
-    # result = _build_msal_app(cache=cache).acquire_token_by_auth_code_flow(
-    #     session.get("flow", {}), request.args)
-    # if "error" in result:
-    #     return ("Auth Error")
-    # session["user"] = result.get("id_token_claims")
-    # _save_cache(cache)
-    # username=session['user']
+
     # username2=session['username']
     r2 = requests.get('https://graph.microsoft.com/v1.0/users/{id | userPrincipalName}')
     rj2 = r2.json()
