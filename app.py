@@ -55,17 +55,21 @@ Output('username-div2','children'),
               Input('url','pathname'))
 def authorized(pathname):
     print("PATHNAME:",pathname)
-    if(pathname=='/'):
+    if(pathname=='/' and not session.get('user')):
         session["flow"] = _build_auth_code_flow(scopes=app_config.SCOPE)
         print("AUTH URI:", session["flow"]["auth_uri"])
     elif(pathname=='/getAToken'):
         print("Inside this getatoken condition")
         cache = _load_cache()
+        print(cache)
+        print("Loaded Cache")
         result = _build_msal_app(cache=cache).acquire_token_by_auth_code_flow(
             session.get("flow", {}), request.args)
+        print("Obtained result")
         if "error" in result:
             return ("Auth Error")
         session["user"] = result.get("id_token_claims")
+        print("Assigned val to session user")
         _save_cache(cache)
         username = session['user']
         print("USERNAME:",username)
